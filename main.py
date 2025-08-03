@@ -40,17 +40,17 @@ class PatientData(BaseModel):
 
 @app.post("/predict")
 def predict_readmission(data: PatientData):
-    # Convert input to DataFrame
-    input_df = pd.DataFrame([data.dict()])
-    
-    # Predict
-    prediction = model.predict(input_df)[0]
-    
-    return {"prediction": prediction}
+    try:
+        input_df = pd.DataFrame([data.dict()])
+        prediction = model.predict(input_df)
+        return {"prediction": prediction[0]}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
 
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run("main:app", host="0.0.0.0", port=8080)
+
 
 
 
