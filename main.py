@@ -4,8 +4,14 @@ import pandas as pd
 import joblib
 
 # Load the trained model
-model = joblib.load("logistic_model.pkl")
-
+try:
+    model = joblib.load("logistic_model.pkl")
+    print(" Model loaded successfully.")
+except FileNotFoundError:
+    print(" Model file not found")
+except Exception as e:
+    print(f" Error loading model: {e}")
+    
 # Create the FastAPI app
 app = FastAPI()
 
@@ -45,5 +51,6 @@ def predict_readmission(data: PatientData):
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run("main:app", host="0.0.0.0", port=8080)
+
 
 
